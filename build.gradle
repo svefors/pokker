@@ -1,0 +1,103 @@
+apply plugin: 'sonar'
+
+//project.name = "sweforce-vaadin"
+
+
+sonar {
+    server {
+        url = "http://buildserver.sweforce.com:9000"
+    }
+    database {
+        url = "jdbc:mysql://buildserver.sweforce.com:3306/sonar"
+        driverClassName = "com.mysql.jdbc.Driver"
+        username = "sveffa"
+        password = "1qazxsw2"
+    }
+
+}
+
+def prevaylerVersion = "2.5"
+def axonVersion = "2.0-m2"
+def scalaVersion = "2.9.2"
+def sweforceVaadinVersion = "1.2.3"
+def vaadinVersion = "7.1.0"
+
+
+ext.libs = [
+        junit: "junit:junit:4.10",
+        prevayler: [
+                "org.prevayler:prevayler-core:${prevaylerVersion}",
+                "org.prevayler:prevayler-factory:${prevaylerVersion}",
+                "org.prevayler.extras:prevayler-xstream:${prevaylerVersion}",
+        ],
+        scala: dependencies.create("org.scala-lang:scala-library:${scalaVersion}") {
+
+        },
+        axon: [
+                "org.axonframework:axon-core:${axonVersion}"
+        ],
+        slf4j: [
+                "org.clapper:grizzled-slf4j_${scalaVersion}:0.6.10",
+                'org.slf4j:slf4j-api:1.6.6',
+                'ch.qos.logback:logback-classic:1.0.6'
+        ],
+        sweforce_vaadin: [
+                "sweforce.vaadin:activitiesplaces:${sweforceVaadinVersion}",
+                "sweforce.vaadin:security-shiro:${sweforceVaadinVersion}",
+                "sweforce.vaadin:layout:${sweforceVaadinVersion}",
+                "sweforce.vaadin:events:${sweforceVaadinVersion}",
+                "sweforce.vaadin:command:${sweforceVaadinVersion}",
+                "sweforce.vaadin:components:${sweforceVaadinVersion}"
+        ],
+        vaadin: [
+                "com.vaadin:vaadin-server:${vaadinVersion}",
+                "com.vaadin:vaadin-client-compiled:${vaadinVersion}",
+                "com.vaadin:vaadin-themes:${vaadinVersion}"
+        ],
+        jsr303: [
+                "javax.validation:validation-api:1.0.0.GA",
+                "org.apache.bval:bval-jsr303:0.4"
+        ],
+        servlet_api: "javax.servlet:servlet-api:2.5"
+]
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    sonar {}
+    group = "sweforce.vaadin"
+    project.version = "1.0.0"
+}
+
+subprojects {
+    apply plugin: 'scala'
+    dependencies {
+        testCompile "junit:junit:4.10"
+        compile([
+                'org.slf4j:slf4j-api:1.6.6',
+                'ch.qos.logback:logback-classic:1.0.6',
+        ])
+
+    }
+    targetCompatibility = 1.6
+    sourceCompatibility = 1.6
+    repositories {
+        mavenRepo url: 'http://maven.vaadin.com/vaadin-addons'
+        mavenRepo url: 'http://oss.sonatype.org/content/repositories/vaadin-snapshots/'
+        mavenRepo url: 'https://oss.sonatype.org/content/repositories/vaadin-releases'
+        mavenCentral()
+    }
+}
+
+project(':app') {
+    dependencies {
+        compile([
+                libs.vaadin,
+                
+        ])
+    }
+}
+
+
+
