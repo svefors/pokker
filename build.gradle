@@ -18,7 +18,7 @@ sonar {
 
 def prevaylerVersion = "2.5"
 def axonVersion = "2.0-m2"
-def scalaVersion = "2.9.2"
+def scalaVersion = "2.10.0"
 def sweforceVaadinVersion = "1.2.3"
 def vaadinVersion = "7.1.0"
 
@@ -58,7 +58,7 @@ ext.libs = [
                 "javax.validation:validation-api:1.0.0.GA",
                 "org.apache.bval:bval-jsr303:0.4"
         ],
-        servlet_api: "javax.servlet:servlet-api:2.5"
+        servlet_api: 'javax.servlet:javax.servlet-api:3.0.1'
 ]
 
 allprojects {
@@ -94,8 +94,17 @@ project(':app') {
     dependencies {
         compile([
                 libs.vaadin,
-                
+                libs.servlet_api,
+                libs.scala
+
         ])
+        testCompile(
+                'org.eclipse.jetty:jetty-server:9.0.4.v20130625',
+                'org.eclipse.jetty:jetty-webapp:9.0.4.v20130625',
+                'org.eclipse.jetty:jetty-plus:9.0.4.v20130625',
+                'org.eclipse.jetty:jetty-annotations:9.0.4.v20130625',
+                'asm:asm:3.3.1'
+        )
     }
 }
 
