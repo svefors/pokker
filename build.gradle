@@ -30,7 +30,10 @@ ext.libs = [
                 "org.prevayler:prevayler-factory:${prevaylerVersion}",
                 "org.prevayler.extras:prevayler-xstream:${prevaylerVersion}",
         ],
-        scala: dependencies.create("org.scala-lang:scala-library:${scalaVersion}") {
+        scala_lib: dependencies.create("org.scala-lang:scala-library:${scalaVersion}") {
+
+        },
+        scala_compiler: dependencies.create("org.scala-lang:scala-compiler:${scalaVersion}") {
 
         },
         axon: [
@@ -68,37 +71,45 @@ allprojects {
     sonar {}
     group = "sweforce.vaadin"
     project.version = "1.0.0"
-}
-
-subprojects {
-    apply plugin: 'scala'
-    dependencies {
-        testCompile "junit:junit:4.10"
-        compile([
-                'org.slf4j:slf4j-api:1.6.6',
-                'ch.qos.logback:logback-classic:1.0.6',
-        ])
-
-    }
-    targetCompatibility = 1.6
-    sourceCompatibility = 1.6
     repositories {
         mavenRepo url: 'http://maven.vaadin.com/vaadin-addons'
         mavenRepo url: 'http://oss.sonatype.org/content/repositories/vaadin-snapshots/'
         mavenRepo url: 'https://oss.sonatype.org/content/repositories/vaadin-releases'
         mavenCentral()
+        ivy {
+            url "http://jelastic-ant-task.googlecode.com/files"
+            layout "pattern", {
+                artifact "[organisation]-[artifact]-[revision].[type]"
+
+            }
+        }
+
     }
 }
 
+subprojects {
+
+
+    ext.targetCompatibility = 1.6
+    ext.sourceCompatibility = 1.6
+
+}
+
 project(':app') {
+    apply plugin: 'scala'
+    apply plugin: 'java'
+    apply plugin: 'war'
     dependencies {
+        scalaTools libs.scala_compiler
         compile([
                 libs.vaadin,
                 libs.servlet_api,
-                libs.scala
-
+                libs.scala_lib,
+                'org.slf4j:slf4j-api:1.6.6',
+                'ch.qos.logback:logback-classic:1.0.6',
         ])
         testCompile(
+                libs.junit,
                 'org.eclipse.jetty:jetty-server:9.0.4.v20130625',
                 'org.eclipse.jetty:jetty-webapp:9.0.4.v20130625',
                 'org.eclipse.jetty:jetty-plus:9.0.4.v20130625',
@@ -107,6 +118,45 @@ project(':app') {
         )
     }
 }
+
+configurations {
+    jelastic
+}
+dependencies {
+
+    jelastic([
+            'com.google.code.gson:gson:2.1',
+            'org.apache.httpcomponents:httpcore:4.1.1',
+            'org.apache.httpcomponents:httpclient:4.1.1',
+            'org.apache.httpcomponents:httpmime:4.1.1',
+            'commons-codec:commons-codec:1.4',
+            'commons-logging:commons-logging:1.1.1',
+            'jelastic:ant-task:1.1-SNAPSHOT'
+            //files('libs/jelastic-ant-task-1.1-SNAPSHOT.jar'),
+//            artifact {
+//                name = 'jelastic-ant-task'
+//                extension = 'jar'
+//                type = "jar"
+//                url = 'https://jelastic-ant-task.googlecode.com/files/jelastic-ant-task-1.1-SNAPSHOT.jar'
+//            }
+    ])
+}
+
+
+task deployJelastic(dependsOn: ':app:war') << {
+    ant.taskdef(name: 'jelastic', classname: 'com.jelastic.Jelastic', classpath: configurations.jelastic.asPath)
+    ant.jelastic(email: jelasticUser,
+            password: jelasticPassword,
+            dir: "app/build/libs/",
+            filename: "app-1.0.0.war",
+            context: "",
+            environment: "sweforce",
+            apihoster: "app.jelastic.servint.net") {
+
+    }
+}
+
+
 
 
 
