@@ -18,10 +18,12 @@ sonar {
 
 def prevaylerVersion = "2.5"
 def axonVersion = "2.0-m2"
-def scalaVersion = "2.10.0"
+def scalaVersion = "2.10.2"
 def sweforceVaadinVersion = "1.2.3"
 def vaadinVersion = "7.1.0"
 
+//def jettyVersion = "8.1.12.v20130726" //9.0.4.v20130625
+def jettyVersion = "9.0.4.v20130625"
 
 ext.libs = [
         junit: "junit:junit:4.10",
@@ -36,6 +38,7 @@ ext.libs = [
         scala_compiler: dependencies.create("org.scala-lang:scala-compiler:${scalaVersion}") {
 
         },
+        scala_test: ['org.scalatest:scalatest_2.10:2.0.M6-SNAP36'],
         axon: [
                 "org.axonframework:axon-core:${axonVersion}"
         ],
@@ -66,6 +69,7 @@ ext.libs = [
 
 allprojects {
     apply plugin: 'maven'
+    apply plugin: 'project-reports'
     apply plugin: 'idea'
     apply plugin: 'eclipse'
     sonar {}
@@ -100,20 +104,25 @@ project(':app') {
     apply plugin: 'java'
     apply plugin: 'war'
     dependencies {
-        scalaTools libs.scala_compiler
+        //scalaTools libs.scala_compiler
         compile([
                 libs.vaadin,
                 libs.servlet_api,
                 libs.scala_lib,
+                libs.scala_compiler,
                 'org.slf4j:slf4j-api:1.6.6',
                 'ch.qos.logback:logback-classic:1.0.6',
         ])
+        testCompile("org.scalatest:scalatest_2.10:2.0.M6-SNAP36") {
+            exclude group: 'org.scala-lang'
+        }
         testCompile(
                 libs.junit,
-                'org.eclipse.jetty:jetty-server:9.0.4.v20130625',
-                'org.eclipse.jetty:jetty-webapp:9.0.4.v20130625',
-                'org.eclipse.jetty:jetty-plus:9.0.4.v20130625',
-                'org.eclipse.jetty:jetty-annotations:9.0.4.v20130625',
+//                libs.scala_test,
+                "org.eclipse.jetty:jetty-server:${jettyVersion}",
+                "org.eclipse.jetty:jetty-webapp:${jettyVersion}",
+                "org.eclipse.jetty:jetty-plus:${jettyVersion}",
+                "org.eclipse.jetty:jetty-annotations:${jettyVersion}",
                 'asm:asm:3.3.1'
         )
     }

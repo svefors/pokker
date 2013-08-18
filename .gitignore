@@ -13,3 +13,13 @@ project/plugins/project/
 .scala_dependencies
 .gradle/**/*
 /app/build/**/*
+out/test/app/
+test("Two decks are equal if their card order is the same") {
+    val cardOrder1 = List(Card(Diamonds, Nine), Card(Spades, Six))
+    val cardOrder2 = List(Card(Diamonds, Nine), Card(Spades, Six))
+    var deck1 = new Deck(mutable.Stack() ++ (cardOrder1))
+    var deck2 = new Deck(mutable.Stack() ++ (cardOrder2))
+    assert(deck1 == deck2)
+ out/production/app
+out/production/app/
+build/reports/
