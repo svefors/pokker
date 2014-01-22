@@ -2,12 +2,14 @@ package sweforce.pokker.app
 
 import org.eclipse.jetty.server.{HttpConnectionFactory, ServerConnector, Server}
 import org.eclipse.jetty.webapp.WebAppContext
+import org.eclipse.jetty.util.thread.QueuedThreadPool
 
 
 object StartJetty extends App {
 
-
-  val jettyServer = new Server()
+  val threadPool = new QueuedThreadPool()
+  threadPool.setMaxThreads(4)
+  val jettyServer = new Server(threadPool)
   val classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(jettyServer);
   classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration",
     "org.eclipse.jetty.plus.webapp.EnvConfiguration", "org.eclipse.jetty.plus.webapp.PlusConfiguration");
@@ -21,6 +23,7 @@ object StartJetty extends App {
   val connectionFactory = new HttpConnectionFactory()
   connector.addConnectionFactory(connectionFactory)
   jettyServer.addConnector(connector)
+
 
 
   val webContext = new WebAppContext();

@@ -1,0 +1,74 @@
+PlayerJoinedSitnGo
+	playerId : PlayerId
+	tournamentId : TournamentId
+	stake : Money
+	commission : Money
+	
+PlayerCancelledSitnGo
+	playerId : PlayerId
+	tournamentId : TournamentId
+	stake : Money
+	commission : Money
+	
+TournamentStarted
+	tournamentId : TournamentId
+	players : Array[PlayerId]
+
+DealerButtonCardsDrawn
+	playerId : PlayerId
+	card : Card
+
+DealerButtonCardsEqual
+	playerId : Array[PlayerId]
+
+DealerDecided
+	playerId : PlayerId
+	card : Card
+
+BigBlindPosted
+	playerId : PlayerId
+	chips : ChipPot
+	
+SmallBlindPosted
+	playerId : PlayerId
+	chips : ChipPot
+	
+DealStarted
+	playersLeft : Array[Player]
+	dealer : PlayerId
+	bigBlind : PlayerId
+	smallBlind : PlayerId
+	bigBlindSize : PlayerId
+	smallBlindSize : PlayerId
+
+AnteRequested
+	ante : ChipPot
+
+AntePaid
+	ante : ChipPot
+	player : PlayerId
+
+PlayerAllIn
+	player : PlayerId
+
+PocketCardsDealt
+    player : PlayerId
+    card1 : Card
+    card2 : Card
+
+
+BigBlindPosted
+
+	
+PlayerJoinedSitAndGo
+	stake : Money
+	chips : ChipPot
+	
+PlayerLeftSitAndGo
+	chips : ChipPot
+	cashInAmount : Money
+	
+	
+two types of tables, 
+Sit & Go
+Tournament
