@@ -23,7 +23,7 @@ def sweforceVaadinVersion = "1.2.3"
 def vaadinVersion = "7.1.0"
 
 //def jettyVersion = "8.1.12.v20130726" //9.0.4.v20130625
-def jettyVersion = "9.0.4.v20130625"
+def jettyVersion = "9.1.3.v20140225"
 
 ext.libs = [
         junit: "junit:junit:4.10",
@@ -54,13 +54,9 @@ ext.libs = [
                 'org.slf4j:slf4j-api:1.6.6',
                 'ch.qos.logback:logback-classic:1.0.6'
         ],
-        sweforce_vaadin: [
-                "sweforce.vaadin:activitiesplaces:${sweforceVaadinVersion}",
-                "sweforce.vaadin:security-shiro:${sweforceVaadinVersion}",
-                "sweforce.vaadin:layout:${sweforceVaadinVersion}",
-                "sweforce.vaadin:events:${sweforceVaadinVersion}",
-                "sweforce.vaadin:command:${sweforceVaadinVersion}",
-                "sweforce.vaadin:components:${sweforceVaadinVersion}"
+        macwire: [
+                "com.softwaremill.macwire:macros_2.10:0.5",
+                "com.softwaremill.macwire:runtime_2.10:0.5"
         ],
         vaadin: [
                 "com.vaadin:vaadin-server:${vaadinVersion}",
@@ -72,7 +68,7 @@ ext.libs = [
                 "javax.validation:validation-api:1.0.0.GA",
                 "org.apache.bval:bval-jsr303:0.4"
         ],
-        shiro: [
+        security: [
                 'org.apache.shiro:shiro-core:1.2.2',
                 'org.apache.shiro:shiro-web:1.2.2'
         ],
@@ -88,10 +84,19 @@ allprojects {
     group = "sweforce.vaadin"
     project.version = "1.0.0"
     repositories {
-        mavenRepo url: 'http://maven.vaadin.com/vaadin-addons'
-        mavenRepo url: 'http://oss.sonatype.org/content/repositories/vaadin-snapshots/'
-        mavenRepo url: 'https://oss.sonatype.org/content/repositories/vaadin-releases'
+        maven {
+            url "http://maven.vaadin.com/vaadin-addons"
+        }
+        maven {
+            url "http://oss.sonatype.org/content/repositories/vaadin-snapshots/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/vaadin-releases"
+        }
         mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/releases"
+        }
         ivy {
             url "http://jelastic-ant-task.googlecode.com/files"
             layout "pattern", {
@@ -126,7 +131,8 @@ project(':app') {
                 libs.scala_check,
                 libs.rx_scala,
                 libs.akka_actors,
-                libs.shiro,
+                libs.security,
+                libs.macwire,
                 'org.slf4j:slf4j-api:1.6.6',
                 'ch.qos.logback:logback-classic:1.0.6',
         ])
@@ -140,7 +146,7 @@ project(':app') {
                 "org.eclipse.jetty:jetty-webapp:${jettyVersion}",
                 "org.eclipse.jetty:jetty-plus:${jettyVersion}",
                 "org.eclipse.jetty:jetty-annotations:${jettyVersion}",
-                'asm:asm:3.3.1',
+                'asm:asm:4.1',
                 libs.akka_testkit
         )
     }

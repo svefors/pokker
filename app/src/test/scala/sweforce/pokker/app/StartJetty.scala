@@ -8,7 +8,7 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool
 object StartJetty extends App {
 
   val threadPool = new QueuedThreadPool()
-  threadPool.setMaxThreads(4)
+  threadPool.setMaxThreads(10)
   val jettyServer = new Server(threadPool)
   val classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(jettyServer);
   classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration",
@@ -19,7 +19,7 @@ object StartJetty extends App {
   //5 minutes idle time
   connector.setIdleTimeout(1000 * 60 * 5)
   connector.setSoLingerTime(-1)
-  connector.setPort(8081)
+  connector.setPort(8082)
   val connectionFactory = new HttpConnectionFactory()
   connector.addConnectionFactory(connectionFactory)
   jettyServer.addConnector(connector)

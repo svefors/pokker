@@ -33,8 +33,9 @@ class VaadinSessionController(val session : VaadinSession) extends Actor with Ac
       ui.value match {
         case Some(success) => success match {
           case Success(pokker) => pokker.asInstanceOf[UI]
+          case _ => ???
         }
-
+        case _ => ???
       }
     }
   }

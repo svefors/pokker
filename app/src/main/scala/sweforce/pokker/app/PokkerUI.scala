@@ -12,6 +12,9 @@ import com.vaadin.annotations.Push
 import rx.{Observer, Observable}
 import com.vaadin.data.Property
 import sweforce.pokker.app.aaa.LoginPanel
+import sweforce.vaadin.ui.UIWithActor
+import akka.actor.ActorRef
+import com.vaadin.navigator.Navigator
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,48 +24,71 @@ import sweforce.pokker.app.aaa.LoginPanel
  * To change this template use File | Settings | File Templates.
  */
 @Push
-class PokkerUI extends UI{
+class PokkerUI(actor : ActorRef) extends UI{
 
   def init(request: VaadinRequest) {
-    val layout = new VerticalLayout()
-    this.setContent(layout);
-    layout.addComponent(new Label("Hello World!"));
+    val navigator = new Navigator(this, this)
+    this.setContent(new Label("hello World"))
     /*
-    I want a property that is built on top of a reactive extension.
-    I want to invoke ui.access
+    viewprovider
+    fragment strategy
+    security
      */
-    val txt = new TextField("apa")
-    val property = new ObjectProperty[String]("")
-    txt.setPropertyDataSource(property)
-    txt.setValue("asdf")
-    txt.setImmediate(true)
-    layout.addComponent(txt)
-    var i = 0
-    val p = Promise[String]()
-    p.future.onComplete( x => access(
-      new Runnable {
-        def run() = {
-          property.setValue("foo" + i)
-          i += 1
-        }
-      }))
+//    navigator.addView("login", new LoginPanel(actor))
+//    val layout = new VerticalLayout()
+//    this.setContent(layout);
+//    layout.addComponent(new Label("Hello World!"));
+//    /*
+//    I want a property that is built on top of a reactive extension.
+//    I want to invoke ui.access
+//     */
+//    val txt = new TextField("apa")
+//    val property = new ObjectProperty[String]("")
+//    txt.setPropertyDataSource(property)
+//    txt.setValue("asdf")
+//    txt.setImmediate(true)
+//    layout.addComponent(txt)
+//    var i = 0
+//    val p = Promise[String]()
+//    p.future.onComplete( x => access(
+//      new Runnable {
+//        def run() = {
+//          property.setValue("foo" + i)
+//          i += 1
+//        }
+//      }))
+//
+//    val button = new Button("just a button")
+//    button.setEnabled(true)
+//    button.addClickListener(new ClickListener {
+//
+//      def buttonClick(event: ClickEvent){
+//        async{
+//          Thread.sleep(1000)
+//          p.success("Qwerty")
+//        }
+//      }
+//    })
+//    button.setImmediate(true)
+//    layout.addComponent(button)
+//    layout.addComponent(new LoginPanel)
+  }
+  /*
+  object ui extends UIDefinition {
 
-    val button = new Button("just a button")
-    button.setEnabled(true)
-    button.addClickListener(new ClickListener {
+    "" {
+    }
+    "lobby/{gameType}/{id}" {
+      layout
+    }
 
-      def buttonClick(event: ClickEvent){
-        async{
-          Thread.sleep(1000)
-          p.success("Qwerty")
-        }
-      }
-    })
-    button.setImmediate(true)
-    layout.addComponent(button)
-    layout.addComponent(new LoginPanel)
+
   }
 
+  FragmentMappings
+  "#lobby" -> Lobby
+  "#
+   */
   /*
   There is a lot of magic happening in Vaadin.
   Somethings might happen on the client.
