@@ -10,9 +10,7 @@ import com.vaadin.ui.Button.{ClickEvent, ClickListener}
 import com.vaadin.shared.communication.PushMode
 import com.vaadin.annotations.Push
 import rx.{Observer, Observable}
-import com.vaadin.data.Property
-import sweforce.pokker.app.aaa.LoginPanel
-import sweforce.vaadin.ui.UIWithActor
+
 import akka.actor.ActorRef
 import com.vaadin.navigator.Navigator
 

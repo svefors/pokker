@@ -6,6 +6,7 @@ import org.apache.shiro.mgt.DefaultSecurityManager
 import org.apache.shiro.realm.SimpleAccountRealm
 import sweforce.vaadin.macwire.VaadinModule
 import com.vaadin.navigator.View
+import sweforce.vaadin.security.login.LoginView
 
 /**
  * Created by sveffa on 21/03/14.
